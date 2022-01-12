@@ -64,14 +64,6 @@ public class WordleSolver {
         }
     }
 
-//    private void updateCharGuessesMap(int i, char c) {
-//        if (charGuessesMap.containsKey(c)) {
-//            charGuessesMap.get(c).add(i);
-//        } else {
-//            charGuessesMap.put(c, new HashSet<Integer>(){{ add(i); }});
-//        }
-//    }
-
     public void checkWord(String guess) {
         validateWord(guess, trie);
 
