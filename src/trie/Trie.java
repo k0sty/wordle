@@ -1,7 +1,9 @@
 package trie;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 public class Trie {
     private TrieLevel rootTrieLevel;
@@ -28,6 +30,19 @@ public class Trie {
         }
     }
 
+//    public Set<String> generatePotentialWordsHelper(String currentGuess, StringBuilder currentWord, )
+
+//    public Set<String> generatePotentialWords(String currentGuess, Set<Character> wrongLocation,
+//                                              Set<Character> notPresent) {
+//        Set <String> ret = new HashSet<>();
+//        TrieLevel currentLevel = rootTrieLevel;
+//        for (int i = 0; i < currentGuess.length(); i ++) {
+//            char curr = currentGuess.charAt(i);
+//            if ()
+//        }
+//        return ret;
+//    }
+
     public boolean checkIfPresent(String word) {
 
         TrieLevel currentLevel = rootTrieLevel;
@@ -37,7 +52,7 @@ public class Trie {
             if (!currentMap.containsKey(currChar)) {
                 return false;
             } else if (i == word.length()-1){
-                // we are at the last character. this is special
+                // we are at the last character. this is a special case
                 TrieLevel nextlevel = currentMap.get(currChar);
                 return nextlevel.isWord();
             }

@@ -4,7 +4,9 @@ package wordle;
 import trie.Trie;
 
 import java.io.File;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Random;
 import java.util.Scanner;
 import java.util.Set;
@@ -15,10 +17,13 @@ public class WordleSolver {
     private final static int MAX_GESSES = 6;
     private final static int WORD_LENGTH = 5;
 
+    private final StringBuilder currentState;
     private final String word;
     private final Trie trie;
-    private final Set<Character> actualWordCharSet;
+    private final Map<Character, Integer> charCountMap;
+    private final Map<Character, Set<Integer>> charGuessesMap;
     private final SortedSet<Character> charsInWrongSpot;
+    private final Set<Character> charsNotToAddToWrongSpotSet;
     private final SortedSet<Character> charsNotInWordSet;
 
 
@@ -26,12 +31,25 @@ public class WordleSolver {
         validateWord(word, trie);
         this.word = word;
         this.trie = trie;
-        actualWordCharSet = new HashSet<>();
+        this.charsNotToAddToWrongSpotSet = new HashSet<>();
+        this.currentState = new StringBuilder("-----");
+        charGuessesMap = new HashMap<>();
+        charCountMap = getMapFromWord(word);
         charsNotInWordSet = new TreeSet<>();
         charsInWrongSpot = new TreeSet<>();
+    }
+
+    private static Map<Character, Integer> getMapFromWord(String word) {
+        Map<Character, Integer> ret = new HashMap<>();
         for (Character curr : word.toCharArray()) {
-            actualWordCharSet.add(curr);
+            if (ret.containsKey(curr)) {
+                ret.put(curr, ret.get(curr)+1);
+            } else {
+                ret.put(curr, 1);
+            }
+
         }
+        return ret;
     }
 
     private static void validateWord(String word, Trie trie) {
@@ -46,23 +64,44 @@ public class WordleSolver {
         }
     }
 
-    public void checkWord(String guess) {
-        StringBuilder ret = new StringBuilder("-----");
+//    private void updateCharGuessesMap(int i, char c) {
+//        if (charGuessesMap.containsKey(c)) {
+//            charGuessesMap.get(c).add(i);
+//        } else {
+//            charGuessesMap.put(c, new HashSet<Integer>(){{ add(i); }});
+//        }
+//    }
 
+    public void checkWord(String guess) {
         validateWord(guess, trie);
 
         for (int i = 0; i < guess.length(); i++) {
             char guessChar = guess.charAt(i);
+            //updateCharGuessesMap(i, guessChar);
             if (guessChar == word.charAt(i)) {
-                ret.setCharAt(i, guessChar);
-            } else if (actualWordCharSet.contains(guessChar)) {
+                currentState.setCharAt(i, guessChar);
+            } else if (charCountMap.containsKey(guessChar) &&
+                    !charsNotToAddToWrongSpotSet.contains(guessChar)){
                 charsInWrongSpot.add(guessChar);
             } else {
                 charsNotInWordSet.add(guessChar);
             }
         }
 
-        System.out.println(String.format("%s %s %s", ret.toString(), charsInWrongSpot.toString(),
+
+        final Map<Character, Integer> currentGuessMap = getMapFromWord(currentState.toString());
+        for (Character curr : currentGuessMap.keySet()) {
+            if (curr != '-') {
+                if (charCountMap.containsKey(curr) && charCountMap.get(curr).equals(currentGuessMap.get(curr))) {
+                    charsNotToAddToWrongSpotSet.add(curr);
+                    charsInWrongSpot.remove(curr);
+                }
+            }
+        }
+
+
+        System.out.println(String.format("%s ... Wrong Spot: %s Not Present: %s",
+                currentState.toString(), charsInWrongSpot.toString(),
                 charsNotInWordSet.toString()));
     }
 
