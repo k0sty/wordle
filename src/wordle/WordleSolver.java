@@ -14,7 +14,7 @@ public class WordleSolver {
         Scanner scanner = new Scanner(new File("src/wordle/words_list"));
         while (scanner.hasNextLine()) {
             String line = scanner.nextLine().trim();
-            trie.addWord(line, 0);
+            trie.addWord(line);
 
         }
         trie.printAllWords();

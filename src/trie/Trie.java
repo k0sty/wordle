@@ -10,7 +10,7 @@ public class Trie {
         rootTrieLevel = new TrieLevel();
     }
 
-    public void addWord(String word, int value) {
+    public void addWord(String word) {
         TrieLevel currentLevel = rootTrieLevel;
         for (int i = 0; i < word.length(); i++) {
             char curr = word.charAt(i);
@@ -18,10 +18,10 @@ public class Trie {
             final Map<Character, TrieLevel> currentMap = currentLevel.getTrieLevelMap();
             if (currentMap.containsKey(curr)) {
                 final TrieLevel trieLevel = currentMap.get(curr);
-                trieLevel.setIsWord(isWord, value);
+                trieLevel.setIsWord(isWord);
                 currentLevel = trieLevel;
             } else {
-                TrieLevel newLevel = isWord? new TrieLevel(isWord, value) : new TrieLevel();
+                TrieLevel newLevel = isWord? new TrieLevel(isWord) : new TrieLevel();
                 currentMap.put(curr, newLevel);
                 currentLevel = newLevel;
             }
@@ -38,7 +38,7 @@ public class Trie {
     private void printAllWordsHelper(StringBuilder builder, TrieLevel currentLevel) {
 
         if (currentLevel.isWord()) {
-            System.out.println(builder.toString() + " " + currentLevel.getValue());
+            System.out.println(builder.toString());
 
         }
 
