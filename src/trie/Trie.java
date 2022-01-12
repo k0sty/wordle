@@ -28,6 +28,25 @@ public class Trie {
         }
     }
 
+    public boolean checkIfPresent(String word) {
+
+        TrieLevel currentLevel = rootTrieLevel;
+        for (int i = 0; i < word.length(); i++) {
+            char currChar = word.charAt(i);
+            final Map<Character, TrieLevel> currentMap = currentLevel.getTrieLevelMap();
+            if (!currentMap.containsKey(currChar)) {
+                return false;
+            } else if (i == word.length()-1){
+                // we are at the last character. this is special
+                TrieLevel nextlevel = currentMap.get(currChar);
+                return nextlevel.isWord();
+            }
+            currentLevel = currentMap.get(currChar);
+        }
+        return false;
+
+    }
+
     public void printAllWords() {
         TrieLevel currentLevel = rootTrieLevel;
         for (Character curr: currentLevel.getTrieLevelMap().keySet()) {
