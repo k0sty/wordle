@@ -4,6 +4,7 @@ package wordle;
 import trie.Trie;
 
 import java.io.File;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -12,6 +13,8 @@ import java.util.Scanner;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class WordleSolver {
     private final static int MAX_GESSES = 6;
@@ -115,8 +118,17 @@ public class WordleSolver {
             currentWordNumber++;
 
         }
-        System.out.println(word);
+
+        word = "chill";
+        final HashSet<Character> missingChars = Stream.of('w', 'u', 'l', 'i', 't', 'h', 'n', 'c', 'y', 'k', 'e', 's')
+                .collect(Collectors.toCollection(HashSet::new));
+        final HashSet<Character> wrongSlotChars = Stream.of('a', 'f')
+                .collect(Collectors.toCollection(HashSet::new));
+        System.out.println(trie.generatePotentialWords("fa---", wrongSlotChars,
+                missingChars));
+        System.exit(0);
         WordleSolver solver = new WordleSolver(word, trie);
+
         int numGuesses = 0;
         Scanner inputScanner = new Scanner(System.in);
         System.out.println("Enter initial guess:");
