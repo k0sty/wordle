@@ -4,6 +4,7 @@ package wordle;
 import trie.Trie;
 
 import java.io.File;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -100,7 +101,19 @@ public class WordleSolver {
                 charsNotInWordSet.toString()));
     }
 
+    class SortableTuple {
+        final String word;
+        final int frequency;
+
+        public SortableTuple(String word, int frequency) {
+            this.word = word;
+            this.frequency = frequency;
+        }
+    }
+
     public static void main(String[] args) throws Exception {
+        // best initial guess: arose
+
         Trie trie = new Trie();
 
         Random rand = new Random();
@@ -109,8 +122,17 @@ public class WordleSolver {
         Scanner fileScanner = new Scanner(new File("src/wordle/words_list"));
         int currentWordNumber = 0;
         String word = "";
+
+        int[] arr = new int[26];
+        System.out.println(arr[0]);
+        double totalChars = 0;
         while (fileScanner.hasNextLine()) {
             String line = fileScanner.nextLine().trim();
+
+            for (int i = 0; i < line.length(); i++) {
+                arr[line.charAt(i) - 'a']++;
+                totalChars++;
+            }
             trie.addWord(line);
             if (currentWordNumber == random) {
                 word = line;
@@ -118,14 +140,21 @@ public class WordleSolver {
             currentWordNumber++;
 
         }
+        System.out.println(Arrays.toString(arr));
+        for (int i = 0; i < arr.length; i++) {
+            System.out.println((char)('a' + i) + ": " + (double)(arr[i]/totalChars));
+        }
 
         word = "chill";
-        final HashSet<Character> missingChars = Stream.of('w', 'u', 'l', 'i', 't', 'h', 'n', 'c', 'y', 'k', 'e', 's')
+        final HashSet<Character> missingChars = Stream.of('A')
                 .collect(Collectors.toCollection(HashSet::new));
-        final HashSet<Character> wrongSlotChars = Stream.of('a', 'f')
+        final HashSet<Character> wrongSlotChars = Stream.of('r', 'o', 'a', 'e', 's')
                 .collect(Collectors.toCollection(HashSet::new));
-        System.out.println(trie.generatePotentialWords("fa---", wrongSlotChars,
+        System.out.println(trie.generatePotentialWords("-----", wrongSlotChars,
                 missingChars));
+
+
+
         System.exit(0);
         WordleSolver solver = new WordleSolver(word, trie);
 
