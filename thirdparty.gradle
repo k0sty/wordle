@@ -1,0 +1,9 @@
+configurations {
+    all { resolutionStrategy.cacheChangingModulesFor 1, 'hours' }
+    guava
+}
+
+dependencies {
+    //implementation group: 'com.google.code.guice', name: 'guice', version: '1.0'
+    //implementation group: 'com.google.guava', name: 'guava', version: '31.0.1-jre'
+}

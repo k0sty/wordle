@@ -1,0 +1,25 @@
+plugins {
+    id 'java'
+}
+
+group 'org.k0sty'
+version '0.4.2'
+
+allprojects {
+    apply from: getRootProject().file('thirdParty.gradle').getAbsolutePath()
+    apply plugin: 'idea'
+}
+
+repositories {
+    mavenCentral()
+}
+sourceSets {
+    main {
+        java {
+            srcDirs = ['src']
+        }
+    }
+}
+dependencies {
+    implementation group: 'com.google.guava', name: 'guava', version: '31.0.1-jre'
+}
