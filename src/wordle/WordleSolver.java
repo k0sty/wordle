@@ -1,6 +1,7 @@
 package wordle;
 
 
+import com.google.common.base.MoreObjects;
 import trie.Trie;
 
 import java.io.File;
@@ -9,6 +10,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Random;
 import java.util.Scanner;
 import java.util.Set;
@@ -101,13 +103,37 @@ public class WordleSolver {
                 charsNotInWordSet.toString()));
     }
 
-    class SortableTuple {
+    static class SortableTuple implements Comparable<SortableTuple>{
         final String word;
         final int frequency;
 
         public SortableTuple(String word, int frequency) {
             this.word = word;
             this.frequency = frequency;
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (!(o instanceof SortableTuple)) return false;
+            SortableTuple that = (SortableTuple) o;
+            return frequency == that.frequency &&
+                    Objects.equals(word, that.word);
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(word, frequency);
+        }
+
+        @Override
+        public int compareTo(SortableTuple o) {
+            return Integer.compare(frequency, o.frequency);
+        }
+
+        @Override
+        public String toString() {
+            return word;
         }
     }
 
@@ -140,18 +166,29 @@ public class WordleSolver {
             currentWordNumber++;
 
         }
-        System.out.println(Arrays.toString(arr));
-        for (int i = 0; i < arr.length; i++) {
-            System.out.println((char)('a' + i) + ": " + (double)(arr[i]/totalChars));
-        }
 
         word = "chill";
-        final HashSet<Character> missingChars = Stream.of('A')
+        final HashSet<Character> missingChars = Stream.of('r', 'o', 's', 'e', 'i', 'd', 'l', 'c', 'k')
                 .collect(Collectors.toCollection(HashSet::new));
-        final HashSet<Character> wrongSlotChars = Stream.of('r', 'o', 'a', 'e', 's')
+        final HashSet<Character> wrongSlotChars = Stream.of('a')
                 .collect(Collectors.toCollection(HashSet::new));
-        System.out.println(trie.generatePotentialWords("-----", wrongSlotChars,
-                missingChars));
+        final Set<String> potentialWords = trie.generatePotentialWords("ta---", wrongSlotChars,
+                missingChars);
+
+        HashMap<String, Integer> frequencyHashMap = new HashMap<>();
+        Scanner freqScanner = new Scanner(new File("src/wordle/5_letter_freq_unsorted"));
+        while(freqScanner.hasNextLine()) {
+            String[] array = freqScanner.nextLine().trim().split("  ");
+            frequencyHashMap.put(array[0], Integer.parseInt(array[1]));
+
+        }
+        SortedSet<SortableTuple> sortableTuples = new TreeSet<>();
+        for(String str : potentialWords) {
+            final Integer frequencyValue = frequencyHashMap.get(str);
+            sortableTuples.add(new SortableTuple(str, frequencyValue == null ? Integer.MIN_VALUE : frequencyValue));
+        }
+        System.out.println(sortableTuples);
+        System.out.println(potentialWords);
 
 
 
