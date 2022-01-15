@@ -1,5 +1,6 @@
 plugins {
     id 'java'
+    id 'application'
 }
 
 group 'org.k0sty'
@@ -19,6 +20,16 @@ sourceSets {
         }
     }
 }
+
+ext {
+    javaMainClass = 'wordle.WordleSolver'
+}
+
+
+application {
+    mainClassName = javaMainClass
+}
+
 dependencies {
     implementation group: 'com.google.guava', name: 'guava', version: '31.0.1-jre'
 }

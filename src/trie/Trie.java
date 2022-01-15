@@ -1,18 +1,42 @@
 package trie;
 
+import com.sun.source.tree.Tree;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.lang.invoke.WrongMethodTypeException;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
+import java.util.Scanner;
 import java.util.Set;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 public class Trie {
-    private TrieLevel rootTrieLevel;
+    private final TrieLevel rootTrieLevel;
+    private final Map<String, WordWrapper> statsMap;
 
-    public Trie() {
+
+    private Trie() {
+        statsMap = new HashMap<>();
         rootTrieLevel = new TrieLevel(0);
     }
 
-    public void addWord(String word) {
+    public static Trie fromFile(String filePath) throws FileNotFoundException {
+        Trie ret = new Trie();
+
+        Scanner freqScanner = new Scanner(new File(filePath));
+        while(freqScanner.hasNextLine()) {
+            WordWrapper wrapper = WordWrapper.fromLine(freqScanner.nextLine().trim());
+            ret.statsMap.put(wrapper.getWord(), wrapper);
+            ret.addWord(wrapper.getWord());
+        }
+
+        return ret;
+    }
+
+    void addWord(String word) {
         TrieLevel currentLevel = rootTrieLevel;
         for (int i = 0; i < word.length(); i++) {
             char curr = word.charAt(i);
@@ -29,6 +53,8 @@ public class Trie {
             }
         }
     }
+
+
 
     private boolean doesWordContainAllChars(String word, Set<Character> characterSet) {
 
@@ -97,11 +123,17 @@ public class Trie {
         return ret;
     }
 
-    public Set<String> generatePotentialWords(String currentGuess, Set<Character> wrongLocation,
+    public SortedSet<WordWrapper> generatePotentialWords(String currentGuess, Set<Character> wrongLocation,
                                               Set<Character> notPresent) {
 
-        return generatePotentialWordsHelper(currentGuess, new StringBuilder(), rootTrieLevel,
-                wrongLocation, notPresent);
+        TreeSet<WordWrapper> ret = new TreeSet<>();
+
+        for (String str : generatePotentialWordsHelper(currentGuess, new StringBuilder(), rootTrieLevel,
+                wrongLocation, notPresent)) {
+            ret.add(statsMap.get(str));
+        }
+
+        return ret.descendingSet();
     }
 
     public boolean checkIfPresent(String word) {

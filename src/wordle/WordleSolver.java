@@ -1,12 +1,11 @@
 package wordle;
 
 
-import com.google.common.base.MoreObjects;
 import trie.Trie;
+import trie.WordWrapper;
 
 import java.io.File;
-import java.util.Arrays;
-import java.util.Collections;
+import java.io.FileNotFoundException;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -33,10 +32,11 @@ public class WordleSolver {
     private final SortedSet<Character> charsNotInWordSet;
 
 
-    public WordleSolver(String word, Trie trie) {
+    public WordleSolver(String word, String filePath) throws FileNotFoundException {
+        this.trie = Trie.fromFile(filePath);
         validateWord(word, trie);
+
         this.word = word;
-        this.trie = trie;
         this.charsNotToAddToWrongSpotSet = new HashSet<>();
         this.currentState = new StringBuilder("-----");
         charGuessesMap = new HashMap<>();
@@ -75,7 +75,6 @@ public class WordleSolver {
 
         for (int i = 0; i < guess.length(); i++) {
             char guessChar = guess.charAt(i);
-            //updateCharGuessesMap(i, guessChar);
             if (guessChar == word.charAt(i)) {
                 currentState.setCharAt(i, guessChar);
             } else if (charCountMap.containsKey(guessChar) &&
@@ -98,102 +97,33 @@ public class WordleSolver {
         }
 
 
-        System.out.println(String.format("%s ... Wrong Spot: %s Not Present: %s",
-                currentState.toString(), charsInWrongSpot.toString(),
-                charsNotInWordSet.toString()));
+        System.out.printf("%s ... Wrong Spot: %s Not Present: %s%n",
+                currentState, charsInWrongSpot.toString(),
+                charsNotInWordSet.toString());
     }
 
-    static class SortableTuple implements Comparable<SortableTuple>{
-        final String word;
-        final int frequency;
 
-        public SortableTuple(String word, int frequency) {
-            this.word = word;
-            this.frequency = frequency;
-        }
-
-        @Override
-        public boolean equals(Object o) {
-            if (this == o) return true;
-            if (!(o instanceof SortableTuple)) return false;
-            SortableTuple that = (SortableTuple) o;
-            return frequency == that.frequency &&
-                    Objects.equals(word, that.word);
-        }
-
-        @Override
-        public int hashCode() {
-            return Objects.hash(word, frequency);
-        }
-
-        @Override
-        public int compareTo(SortableTuple o) {
-            return Integer.compare(frequency, o.frequency);
-        }
-
-        @Override
-        public String toString() {
-            return word;
-        }
-    }
 
     public static void main(String[] args) throws Exception {
         // best initial guess: arose
 
-        Trie trie = new Trie();
+        //WordleSolver
 
-        Random rand = new Random();
-        int random = rand.nextInt(5757);
+        String word = "chill";
 
-        Scanner fileScanner = new Scanner(new File("src/wordle/words_list"));
-        int currentWordNumber = 0;
-        String word = "";
-
-        int[] arr = new int[26];
-        System.out.println(arr[0]);
-        double totalChars = 0;
-        while (fileScanner.hasNextLine()) {
-            String line = fileScanner.nextLine().trim();
-
-            for (int i = 0; i < line.length(); i++) {
-                arr[line.charAt(i) - 'a']++;
-                totalChars++;
-            }
-            trie.addWord(line);
-            if (currentWordNumber == random) {
-                word = line;
-            }
-            currentWordNumber++;
-
-        }
-
-        word = "chill";
-        final HashSet<Character> missingChars = Stream.of('r', 'o', 's', 'e', 'i', 'd', 'l', 'c', 'k')
+        Trie trie = Trie.fromFile("src/wordle/word_frequency_plurality_list");
+        final HashSet<Character> missingChars = Stream.of('r', 'o', 's', 'e', 'f', 'l')
                 .collect(Collectors.toCollection(HashSet::new));
-        final HashSet<Character> wrongSlotChars = Stream.of('a')
+        final HashSet<Character> wrongSlotChars = Stream.of('a', 'i')
                 .collect(Collectors.toCollection(HashSet::new));
-        final Set<String> potentialWords = trie.generatePotentialWords("ta---", wrongSlotChars,
+        final SortedSet<WordWrapper> potentialWords = trie.generatePotentialWords("--n--", wrongSlotChars,
                 missingChars);
 
         HashMap<String, Integer> frequencyHashMap = new HashMap<>();
-        Scanner freqScanner = new Scanner(new File("src/wordle/5_letter_freq_unsorted"));
-        while(freqScanner.hasNextLine()) {
-            String[] array = freqScanner.nextLine().trim().split("  ");
-            frequencyHashMap.put(array[0], Integer.parseInt(array[1]));
-
-        }
-        SortedSet<SortableTuple> sortableTuples = new TreeSet<>();
-        for(String str : potentialWords) {
-            final Integer frequencyValue = frequencyHashMap.get(str);
-            sortableTuples.add(new SortableTuple(str, frequencyValue == null ? Integer.MIN_VALUE : frequencyValue));
-        }
-        System.out.println(sortableTuples);
         System.out.println(potentialWords);
 
-
-
         System.exit(0);
-        WordleSolver solver = new WordleSolver(word, trie);
+        /*WordleSolver solver = new WordleSolver(word, trie);
 
         int numGuesses = 0;
         Scanner inputScanner = new Scanner(System.in);
@@ -222,7 +152,7 @@ public class WordleSolver {
 
         }
 
-        System.out.println("You have run out of guesses. Better luck next time.");
+        System.out.println("You have run out of guesses. Better luck next time.");*/
 
     }
 }
