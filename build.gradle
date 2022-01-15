@@ -6,7 +6,6 @@ group 'org.k0sty'
 version '0.4.2'
 
 allprojects {
-    apply from: getRootProject().file('thirdParty.gradle').getAbsolutePath()
     apply plugin: 'idea'
 }
 
