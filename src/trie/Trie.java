@@ -1,7 +1,5 @@
 package trie;
 
-import com.sun.source.tree.Tree;
-
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.lang.invoke.WrongMethodTypeException;
