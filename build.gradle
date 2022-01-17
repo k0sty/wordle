@@ -22,7 +22,7 @@ sourceSets {
 }
 
 ext {
-    javaMainClass = 'wordle.WordleSolver'
+    javaMainClass = 'wordle.WordlePlayer'
 }
 
 
