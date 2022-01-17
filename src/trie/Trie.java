@@ -2,6 +2,7 @@ package trie;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.lang.invoke.WrongMethodTypeException;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -21,10 +22,13 @@ public class Trie {
         rootTrieLevel = new TrieLevel(0);
     }
 
-    public static Trie fromFile(String filePath) throws FileNotFoundException {
+    public static Trie fromFile(String resourceName) throws FileNotFoundException {
         Trie ret = new Trie();
 
-        Scanner freqScanner = new Scanner(new File(filePath));
+        Trie.StreamResources streamResources = new Trie.StreamResources();
+        InputStream inputStream = streamResources.getFileFromResourceAsStream(resourceName);
+
+        Scanner freqScanner = new Scanner(inputStream);
         while(freqScanner.hasNextLine()) {
             WordWrapper wrapper = WordWrapper.fromLine(freqScanner.nextLine().trim());
             ret.statsMap.put(wrapper.getWord(), wrapper);
@@ -171,4 +175,24 @@ public class Trie {
             printAllWordsHelper(new StringBuilder().append(builder).append(curr), currentLevel.getTrieLevelMap().get(curr));
         }
     }
+
+    static class StreamResources {
+        // get a file from the resources folder
+        // works everywhere, IDEA, unit test and JAR file.
+        public InputStream getFileFromResourceAsStream(String resourceName) {
+
+            // The class loader that loaded the class
+            ClassLoader classLoader = getClass().getClassLoader();
+            InputStream inputStream = classLoader.getResourceAsStream(resourceName);
+
+            // the stream holding the file content
+            if (inputStream == null) {
+                throw new IllegalArgumentException("file not found! " + resourceName);
+            } else {
+                return inputStream;
+            }
+
+        }
+    }
+
 }

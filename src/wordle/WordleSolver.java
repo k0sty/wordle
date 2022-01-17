@@ -111,7 +111,7 @@ public class WordleSolver {
 
         String word = "chill";
 
-        Trie trie = Trie.fromFile("src/wordle/word_frequency_plurality_list");
+        Trie trie = Trie.fromFile("word_frequency_plurality_list");
         final HashSet<Character> missingChars = Stream.of('r', 'o', 's', 'e', 'f', 'l')
                 .collect(Collectors.toCollection(HashSet::new));
         final HashSet<Character> wrongSlotChars = Stream.of('a', 'i')
