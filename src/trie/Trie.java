@@ -1,5 +1,7 @@
 package trie;
 
+import utils.StreamResources;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
@@ -25,8 +27,7 @@ public class Trie {
     public static Trie fromFile(String resourceName) throws FileNotFoundException {
         Trie ret = new Trie();
 
-        Trie.StreamResources streamResources = new Trie.StreamResources();
-        InputStream inputStream = streamResources.getFileFromResourceAsStream(resourceName);
+        InputStream inputStream = StreamResources.getFileFromResourceAsStream(resourceName);
 
         Scanner freqScanner = new Scanner(inputStream);
         while(freqScanner.hasNextLine()) {
@@ -176,23 +177,6 @@ public class Trie {
         }
     }
 
-    static class StreamResources {
-        // get a file from the resources folder
-        // works everywhere, IDEA, unit test and JAR file.
-        public InputStream getFileFromResourceAsStream(String resourceName) {
 
-            // The class loader that loaded the class
-            ClassLoader classLoader = getClass().getClassLoader();
-            InputStream inputStream = classLoader.getResourceAsStream(resourceName);
-
-            // the stream holding the file content
-            if (inputStream == null) {
-                throw new IllegalArgumentException("file not found! " + resourceName);
-            } else {
-                return inputStream;
-            }
-
-        }
-    }
 
 }

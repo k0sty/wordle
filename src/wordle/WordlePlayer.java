@@ -3,9 +3,13 @@ package wordle;
 
 import trie.Trie;
 import trie.WordWrapper;
+import utils.StreamResources;
 
+import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.HashMap;
@@ -112,17 +116,30 @@ public class WordlePlayer {
 
     private static String getRandomWord(String filePath) throws IOException {
 
-        try (Stream<String> lines = Files.lines(Paths.get(filePath))) {
-            return lines.skip(new Random().nextInt(5757)).findFirst().get().split(" ")[0];
+        final InputStream inputStream = StreamResources.getFileFromResourceAsStream(filePath);
+        BufferedReader br = new BufferedReader(new InputStreamReader(inputStream));
+        int numLines = 30;
+        Random r = new Random();
+        int desiredLine = r.nextInt(numLines);
+
+        String theLine="";
+        int lineCtr = 0;
+        while ((theLine = br.readLine()) != null)   {
+            if (lineCtr == desiredLine) {
+                return theLine.trim().split(" ")[0];
+            }
+            lineCtr++;
         }
+
+        throw new IllegalArgumentException("");
     }
 
     public static void main(String[] args) throws Exception {
         // best initial guess: arose
 
-        String word = getRandomWord("src/wordle/word_frequency_plurality_list");
+        String word = getRandomWord("word_frequency_plurality_list");
 
-        WordlePlayer solver = new WordlePlayer(word, "src/wordle/word_frequency_plurality_list");
+        WordlePlayer solver = new WordlePlayer(word, "word_frequency_plurality_list");
 
         int numGuesses = 0;
         Scanner inputScanner = new Scanner(System.in);

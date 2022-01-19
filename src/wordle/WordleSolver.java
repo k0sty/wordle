@@ -13,12 +13,10 @@ public class WordleSolver {
     public static void main(String[] args) throws Exception {
         // best initial guess: arose
 
-        //WordleSolver
-
         String word = "chill";
 
         Trie trie = Trie.fromFile("word_frequency_plurality_list");
-        final HashSet<Character> missingChars = Stream.of('r', 'o', 's', 'e', 'f', 'l')
+        final HashSet<Character> missingChars = Stream.of('l')
                 .collect(Collectors.toCollection(HashSet::new));
         final HashSet<Character> wrongSlotChars = Stream.of('a', 'r', 'o', 's')
                 .collect(Collectors.toCollection(HashSet::new));
