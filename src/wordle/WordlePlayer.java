@@ -118,7 +118,7 @@ public class WordlePlayer {
 
         final InputStream inputStream = StreamResources.getFileFromResourceAsStream(filePath);
         BufferedReader br = new BufferedReader(new InputStreamReader(inputStream));
-        int numLines = 30;
+        int numLines = 5757;
         Random r = new Random();
         int desiredLine = r.nextInt(numLines);
 
