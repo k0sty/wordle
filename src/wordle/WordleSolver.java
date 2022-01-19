@@ -11,8 +11,14 @@ import java.util.stream.Stream;
 public class WordleSolver {
 
     public static void main(String[] args) throws Exception {
-        Trie trie = Trie.fromFile("src/wordle/word_frequency_plurality_list");
-        final HashSet<Character> missingChars = Stream.of('e')
+        // best initial guess: arose
+
+        //WordleSolver
+
+        String word = "chill";
+
+        Trie trie = Trie.fromFile("word_frequency_plurality_list");
+        final HashSet<Character> missingChars = Stream.of('r', 'o', 's', 'e', 'f', 'l')
                 .collect(Collectors.toCollection(HashSet::new));
         final HashSet<Character> wrongSlotChars = Stream.of('a', 'r', 'o', 's')
                 .collect(Collectors.toCollection(HashSet::new));
