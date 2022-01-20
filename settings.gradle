@@ -1,4 +1,4 @@
 rootProject.name = 'wordle'
 
-include 'trie'
-include 'wordle'
+//include 'trie'
+//include 'wordle'

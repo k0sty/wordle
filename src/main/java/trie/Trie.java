@@ -2,10 +2,8 @@ package trie;
 
 import utils.StreamResources;
 
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
-import java.lang.invoke.WrongMethodTypeException;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -15,7 +13,7 @@ import java.util.SortedSet;
 import java.util.TreeSet;
 
 public class Trie {
-    private final TrieLevel rootTrieLevel;
+    private final trie.TrieLevel rootTrieLevel;
     private final Map<String, WordWrapper> statsMap;
 
 
@@ -39,7 +37,7 @@ public class Trie {
         return ret;
     }
 
-    void addWord(String word) {
+    private void addWord(String word) {
         TrieLevel currentLevel = rootTrieLevel;
         for (int i = 0; i < word.length(); i++) {
             char curr = word.charAt(i);
@@ -56,8 +54,6 @@ public class Trie {
             }
         }
     }
-
-
 
     private boolean doesWordContainAllChars(String word, Set<Character> characterSet) {
 
