@@ -16,9 +16,9 @@ public class WordleSolver {
         String word = "chill";
 
         Trie trie = Trie.fromFile("word_frequency_plurality_list");
-        final HashSet<Character> missingChars = Stream.of('l')
+        final HashSet<Character> missingChars = Stream.of('a', 'r', 's', 'e')
                 .collect(Collectors.toCollection(HashSet::new));
-        final HashSet<Character> wrongSlotChars = Stream.of('a', 'r', 'o', 's')
+        final HashSet<Character> wrongSlotChars = Stream.of('o')
                 .collect(Collectors.toCollection(HashSet::new));
         final SortedSet<WordWrapper> potentialWords = trie.generatePotentialWords("-----", wrongSlotChars,
                 missingChars);

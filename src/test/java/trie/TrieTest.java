@@ -19,7 +19,7 @@ class TrieTest {
         //  as a first unit test.  That 'ninja' should be part of the SortedSet potentialWords
         final String TARGET_WORD = "ninja";
 
-        Trie trie = null;
+        trie.Trie trie = null;
         try {
             trie = Trie.fromFile("word_frequency_plurality_list");
         } catch (FileNotFoundException e) {
