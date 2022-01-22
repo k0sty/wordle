@@ -2,10 +2,13 @@ package trie;
 
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
 import java.util.SortedSet;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.stream.Stream;
 import java.util.stream.Collectors;
 
@@ -23,22 +26,29 @@ class TrieTest {
         try {
             trie = Trie.fromFile("word_frequency_plurality_list");
         } catch (FileNotFoundException e) {
-            System.out.println(e);
+            fail("Word Frequency file was not found");
         }
-        final HashSet<Character> missingChars = Stream.of('r', 'o', 's', 'e', 'f', 'l')
+        final Set<Character> missingChars = Stream.of('r', 'o', 's', 'e', 'f', 'l')
                 .collect(Collectors.toCollection(HashSet::new));
-        final HashSet<Character> wrongSlotChars = Stream.of('a', 'i')
-                .collect(Collectors.toCollection(HashSet::new));
-        final SortedSet<WordWrapper> potentialWords = trie.generatePotentialWords("--n--", wrongSlotChars,
+
+        /*
+        final Set<Character> wrongSlotChars = Stream.of('a', 'i').collect(Collectors.toCollection(HashSet::new));
+        */
+
+        Map<Character, Set<Integer>> charGuessesMap = new HashMap<>();
+        charGuessesMap.put('a', Stream.of(0)
+                .collect(Collectors.toCollection(HashSet::new)));
+        charGuessesMap.put('i', Stream.of(3)
+                .collect(Collectors.toCollection(HashSet::new)));
+        final SortedSet<WordWrapper> potentialWords = trie.generatePotentialWords("--n--", charGuessesMap,
                 missingChars);
 
         boolean wordExists = false;
-        Iterator<WordWrapper> iterator = potentialWords.iterator();
-        while (iterator.hasNext()) {
-            WordWrapper currentWrappedWord = iterator.next();
+        for (WordWrapper currentWrappedWord : potentialWords) {
             System.out.println(currentWrappedWord.getWord());
-            if ( currentWrappedWord.getWord().equalsIgnoreCase(TARGET_WORD) ) {
+            if (currentWrappedWord.getWord().equalsIgnoreCase(TARGET_WORD)) {
                 wordExists = true;
+                break;
             }
         }
 
