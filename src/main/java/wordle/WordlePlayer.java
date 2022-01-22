@@ -91,6 +91,12 @@ public class WordlePlayer {
             } else if (charCountMap.containsKey(guessChar) &&
                     !charsNotToAddToWrongSpotSet.contains(guessChar)){
                 charsInWrongSpot.add(guessChar);
+                if (charGuessesMap.containsKey(guessChar)) {
+                    charGuessesMap.get(guessChar).add(i) ;
+                } else {
+                    charGuessesMap.put(guessChar, Stream.of(i)
+                            .collect(Collectors.toCollection(TreeSet::new)));
+                }
             } else {
                 charsNotInWordSet.add(guessChar);
             }
@@ -107,9 +113,9 @@ public class WordlePlayer {
             }
         }
 
-        System.out.printf("%s ... Wrong Spot: %s Not Present: %s%n",
+        System.out.printf("%s ... Wrong Spot: %s Not Present: %s Guess Map: %s%n",
                 currentState, charsInWrongSpot.toString(),
-                charsNotInWordSet.toString());
+                charsNotInWordSet.toString(), charGuessesMap);
     }
 
 
