@@ -77,7 +77,7 @@ public class WordlePlayer {
     }
 
     public void printPossibilities() {
-        System.out.println(trie.generatePotentialWords(currentState.toString(), charsInWrongSpot, charsNotInWordSet));
+        System.out.println(trie.generatePotentialWords(currentState.toString(), charGuessesMap, charsNotInWordSet));
     }
 
     public void checkWord(String guess) {
@@ -143,8 +143,9 @@ public class WordlePlayer {
     public static void main(String[] args) throws Exception {
         // best initial guess: arose
 
-        String word = getRandomWord("word_frequency_plurality_list");
-
+        //String word = getRandomWord("word_frequency_plurality_list");
+        //System.out.println(word);
+        String word = "heard";
         WordlePlayer solver = new WordlePlayer(word, "word_frequency_plurality_list");
 
         int numGuesses = 0;

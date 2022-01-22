@@ -55,9 +55,9 @@ public class Trie {
         }
     }
 
-    private boolean doesWordContainAllChars(String word, Set<Character> characterSet) {
+    private boolean doesWordContainAllChars(String word, Map<Character, Set<Integer>> charGuessesMap) {
 
-        for (Character character : characterSet) {
+        for (Character character : charGuessesMap.keySet()) {
             if (!word.contains("" + character)) {
                 return false;
             }
@@ -69,7 +69,7 @@ public class Trie {
     private Set<String> generatePotentialWordsHelper(String currentGuess,
                                                      StringBuilder currentWord,
                                                      TrieLevel currentLevel,
-                                                     Set<Character> wrongLocation,
+                                                     Map<Character, Set<Integer>> charGuessesMap,
                                                      Set<Character> notPresent) {
         Set<String> ret = new HashSet<>();
 
@@ -89,18 +89,20 @@ public class Trie {
             final Map<Character, TrieLevel> currentTrieLevelMap = currentLevel.getTrieLevelMap();
             if (curr == '-') {
                 for (Character potentialChar : currentTrieLevelMap.keySet()) {
-                    if (!notPresent.contains(potentialChar)) {
+                    if (charGuessesMap.containsKey(potentialChar) && charGuessesMap.get(potentialChar).contains(currentWord.length())) {
+                        continue;
+                    } else if (!notPresent.contains(potentialChar)) {
                         final StringBuilder potentialWord =
                                 new StringBuilder().append(currentWord).append(potentialChar);
                         if (currentTrieLevelMap.get(potentialChar).isWord()) {
-                            if (doesWordContainAllChars(potentialWord.toString(), wrongLocation)) {
+                            if (doesWordContainAllChars(potentialWord.toString(), charGuessesMap)) {
                                 ret.add(potentialWord.toString());
                             }
                         }
                         ret.addAll(generatePotentialWordsHelper(currentGuess,
                                 potentialWord,
                                 currentTrieLevelMap.get(potentialChar),
-                                wrongLocation, notPresent));
+                                charGuessesMap, notPresent));
                     }
                 }
             } else {
@@ -108,13 +110,13 @@ public class Trie {
                     final StringBuilder potentialWord =
                             new StringBuilder().append(currentWord).append(curr);
                     if (currentTrieLevelMap.get(curr).isWord()) {
-                        if (doesWordContainAllChars(potentialWord.toString(), wrongLocation)) {
+                        if (doesWordContainAllChars(potentialWord.toString(), charGuessesMap)) {
                             ret.add(potentialWord.toString());
                         }
                     }
                     ret.addAll(generatePotentialWordsHelper(currentGuess,
                             potentialWord,
-                            currentTrieLevelMap.get(curr), wrongLocation, notPresent));
+                            currentTrieLevelMap.get(curr), charGuessesMap, notPresent));
                 }
             }
         }
@@ -122,13 +124,13 @@ public class Trie {
         return ret;
     }
 
-    public SortedSet<WordWrapper> generatePotentialWords(String currentGuess, Set<Character> wrongLocation,
+    public SortedSet<WordWrapper> generatePotentialWords(String currentGuess, Map<Character, Set<Integer>> charGuessesMap,
                                               Set<Character> notPresent) {
 
         TreeSet<WordWrapper> ret = new TreeSet<>();
 
         for (String str : generatePotentialWordsHelper(currentGuess, new StringBuilder(), rootTrieLevel,
-                wrongLocation, notPresent)) {
+                charGuessesMap, notPresent)) {
             ret.add(statsMap.get(str));
         }
 
