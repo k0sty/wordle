@@ -1,11 +1,12 @@
 # wordle
+![Build](https://github.com/k0sty/wordle/actions/workflows/gradle.yml/badge.svg)
 
-## Reqs
+## Requirements
 
-- Java (openJDK ok)
+- Java (OpenJDK ok)
 - Gradle
 
-## invoke
+## Usage
 
 `./gradlew build`
 
@@ -13,11 +14,11 @@ Command allows for `System.in` interaction with `WordlePlayer`:
 
 `./gradlew -q --console plain run`
 
-This command not useful, but syntax handy for future gradle work
+This command is not useful, but syntax handy for future gradle work:
 
 `./gradlew --stacktrace clean build run`
 
-## unit test
+## Unit Tests
 
 `./gradlew clean test (-i)`
 
