@@ -16,7 +16,6 @@ public class Serializer {
     */
 
     public static String createJSONString(SortedSet<WordWrapper> set) {
-        // for output of trie.Trie.generatePotentialWords()
 
         JSONArray arrayWords = new JSONArray();
 
