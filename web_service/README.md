@@ -14,7 +14,7 @@ This is a wrapping class to prevent multiple instances of Wordle functional clas
 
 ## Commands
 
-(all from the `/web_service` diretory)
+(all from this `/web_service` diretory)
 
 `./gradlew bootRun`
 
@@ -23,4 +23,13 @@ curl localhost:8080
 curl localhost:8080/demoTrie
 # the latter to be replaced by better parameterized endpoints
 # also will render JSON in the future
+```
+
+## Unit Tests
+
+```
+./gradlew clean test (-i)
+
+# ...or speicific Class
+./gradlew clean test --tests SerializerTests -i
 ```
