@@ -31,7 +31,7 @@ public class WordleSolverApplicationTests {
 	public void demoTrieEndpoint() throws Exception {
 		mvc.perform(MockMvcRequestBuilders.get("/demoTrie").accept(MediaType.APPLICATION_JSON))
 				.andExpect(status().isOk())
-				.andExpect(content().string(equalTo("[wince]")));
+				.andExpect(content().string(equalTo("{\"potentialWords\":[\"wince\"]}")));
 	}
 
 }

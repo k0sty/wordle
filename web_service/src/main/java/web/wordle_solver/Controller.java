@@ -3,6 +3,8 @@ package web.wordle_solver;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import web.utils.Serializer;
+
 // for demonstration purposes only
 import trie.WordWrapper;
 import java.util.HashMap;
@@ -38,7 +40,10 @@ public class Controller {
         final SortedSet<WordWrapper> potentialWords = singletonSteward.trie.generatePotentialWords("-i--e", charGuessesMap,
                 missingChars);
 
-		return potentialWords.toString();
+		// to be replaced
+		String potentialWordsJSON = Serializer.createJSONString(potentialWords);
+
+		return potentialWordsJSON;
 	}
 
 }
