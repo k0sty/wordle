@@ -36,4 +36,4 @@ jobs:
           distribution: 'adopt'
           cache: gradle
       - name: Run unit tests
-        run: cd web_service && ./gradlew clean test
+        run: cd web_service && ../gradlew clean test
