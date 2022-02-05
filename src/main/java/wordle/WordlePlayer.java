@@ -39,9 +39,13 @@ public class WordlePlayer {
 
 
     public WordlePlayer(String word, String filePath) throws FileNotFoundException {
-        this.trie = Trie.fromFile(filePath);
+        this(word, Trie.fromFile(filePath));
+    }
+
+    public WordlePlayer(String word, Trie trie) {
         validateWord(word, trie);
 
+        this.trie = trie;
         this.word = word;
         this.charsNotToAddToWrongSpotSet = new HashSet<>();
         this.currentState = new StringBuilder("-----");
@@ -77,10 +81,14 @@ public class WordlePlayer {
     }
 
     public void printPossibilities() {
-        System.out.println(trie.generatePotentialWords(currentState.toString(), charGuessesMap, charsNotInWordSet));
+        System.out.println(getPossibilities());
     }
 
-    public void checkWord(String guess) {
+    public SortedSet<WordWrapper> getPossibilities() {
+        return trie.generatePotentialWords(currentState.toString(), charGuessesMap, charsNotInWordSet);
+    }
+
+    public void checkWord(String guess, boolean print) {
 
         validateWord(guess, trie);
 
@@ -113,10 +121,13 @@ public class WordlePlayer {
             }
         }
 
-        System.out.printf("%s ... Wrong Spot: %s Not Present: %s Guess Map: %s%n",
-                currentState, charsInWrongSpot.toString(),
-                charsNotInWordSet.toString(), charGuessesMap);
+        if (print) {
+            System.out.printf("%s ... Wrong Spot: %s Not Present: %s Guess Map: %s%n",
+                    currentState, charsInWrongSpot.toString(),
+                    charsNotInWordSet.toString(), charGuessesMap);
+        }
     }
+
 
 
 
@@ -159,7 +170,7 @@ public class WordlePlayer {
                 System.out.println("You got it! It took you " + numGuesses + " guesses.");
                 System.exit(0);
             } else {
-                solver.checkWord(currentGuess);
+                solver.checkWord(currentGuess, true);
             }
 
             String userInput = inputScanner.nextLine();
