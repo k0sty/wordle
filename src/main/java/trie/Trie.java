@@ -1,5 +1,6 @@
 package trie;
 
+import com.google.common.base.Objects;
 import utils.StreamResources;
 
 import java.io.FileNotFoundException;
@@ -66,7 +67,8 @@ public class Trie {
         return true;
     }
 
-    private Set<String> generatePotentialWordsHelper(String currentGuess,
+    private Set<String> generatePotentialWordsHelper(Set<String> guesses,
+                                                     String currentGuess,
                                                      StringBuilder currentWord,
                                                      TrieLevel currentLevel,
                                                      Map<Character, Set<Integer>> charGuessesMap,
@@ -96,13 +98,20 @@ public class Trie {
                                 new StringBuilder().append(currentWord).append(potentialChar);
                         if (currentTrieLevelMap.get(potentialChar).isWord()) {
                             if (doesWordContainAllChars(potentialWord.toString(), charGuessesMap)) {
+                                if (ret.contains(potentialWord.toString())) {
+                                    System.out.println("ADDING THE SAME WORD TWICE");
+                                }
                                 ret.add(potentialWord.toString());
                             }
                         }
-                        ret.addAll(generatePotentialWordsHelper(currentGuess,
-                                potentialWord,
-                                currentTrieLevelMap.get(potentialChar),
-                                charGuessesMap, notPresent));
+                        if (!guesses.contains(potentialWord.toString())) {
+                            guesses.add(potentialWord.toString());
+                            ret.addAll(generatePotentialWordsHelper(guesses, currentGuess,
+                                    potentialWord,
+                                    currentTrieLevelMap.get(potentialChar),
+                                    charGuessesMap, notPresent));
+                        }
+
                     }
                 }
             } else {
@@ -111,12 +120,19 @@ public class Trie {
                             new StringBuilder().append(currentWord).append(curr);
                     if (currentTrieLevelMap.get(curr).isWord()) {
                         if (doesWordContainAllChars(potentialWord.toString(), charGuessesMap)) {
+                            if (ret.contains(potentialWord.toString())) {
+                                System.out.println("ADDING THE SAME WORD TWICE");
+                            }
                             ret.add(potentialWord.toString());
                         }
                     }
-                    ret.addAll(generatePotentialWordsHelper(currentGuess,
-                            potentialWord,
-                            currentTrieLevelMap.get(curr), charGuessesMap, notPresent));
+                    if (!guesses.contains(potentialWord.toString())) {
+                        guesses.add(potentialWord.toString());
+                        ret.addAll(generatePotentialWordsHelper(guesses, currentGuess,
+                                potentialWord,
+                                currentTrieLevelMap.get(curr), charGuessesMap, notPresent));
+                    }
+
                 }
             }
         }
@@ -129,7 +145,7 @@ public class Trie {
 
         TreeSet<WordWrapper> ret = new TreeSet<>();
 
-        for (String str : generatePotentialWordsHelper(currentGuess, new StringBuilder(), rootTrieLevel,
+        for (String str : generatePotentialWordsHelper(new HashSet<>(), currentGuess, new StringBuilder(), rootTrieLevel,
                 charGuessesMap, notPresent)) {
             ret.add(statsMap.get(str));
         }

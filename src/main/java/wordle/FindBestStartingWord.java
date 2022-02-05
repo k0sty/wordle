@@ -1,6 +1,7 @@
 package wordle;
 
 import com.google.common.base.MoreObjects;
+import com.google.common.base.Objects;
 import com.sun.source.tree.Tree;
 import trie.Trie;
 import trie.WordWrapper;
@@ -40,20 +41,67 @@ public class FindBestStartingWord {
         return ret;
     }
 
+    static class WordCountWrapper implements Comparable<WordCountWrapper>{
+        final String word;
+        final int count;
+
+        public WordCountWrapper(String word, int count) {
+            this.word = word;
+            this.count = count;
+        }
+
+        public String getWord() {
+            return word;
+        }
+
+        public int getCount() {
+            return count;
+        }
+
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+
+            WordCountWrapper that = (WordCountWrapper) o;
+
+            return Objects.equal(this.word, that.word) &&
+                    Objects.equal(this.count, that.count);
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hashCode(word, count);
+        }
+
+        @Override
+        public String toString() {
+            return MoreObjects.toStringHelper(this)
+                    .add("word", word)
+                    .add("count", count)
+                    .toString();
+        }
+
+        @Override
+        public int compareTo(WordCountWrapper o) {
+            return Integer.compare(getCount(), o.getCount());
+        }
+    }
 
     static class TenSmallestSet {
-        final TreeSet<Integer> set;
+        final TreeSet<WordCountWrapper> set;
 
         public TenSmallestSet() {
             this.set = new TreeSet<>();
         }
 
-        public void add(int intToAdd) {
+        public void add(WordCountWrapper wordToAdd) {
             if (set.size() < 10) {
-                set.add(intToAdd);
-            } else if (intToAdd < set.last()) {
+                set.add(wordToAdd);
+            } else if (wordToAdd.getCount() < set.last().getCount()) {
                 set.pollLast();
-                set.add(intToAdd);
+                set.add(wordToAdd);
             }
         }
 
@@ -61,6 +109,8 @@ public class FindBestStartingWord {
         public String toString() {
             return set.toString();
         }
+
+
     }
 
     public static void main(String[] args) throws Exception {
@@ -69,6 +119,7 @@ public class FindBestStartingWord {
 
         Map<String, TenSmallestSet> map = new HashMap<>();
 
+        int i = 0;
         String best;
         for (String word : getSetOfPastWinners()) {
 
@@ -76,15 +127,22 @@ public class FindBestStartingWord {
                 WordlePlayer player = new WordlePlayer(word, trie);
                 if (!currentWord.equals(word)) {
                     player.checkWord(currentWord, false);
-                    if (map.containsKey(currentWord)) {
-                        map.get(currentWord).add(player.getPossibilities().size());
+                    if (map.containsKey(word)) {
+                        map.get(word).add(new WordCountWrapper(currentWord, player.getPossibilities().size()));
                     } else {
                         final TenSmallestSet set = new TenSmallestSet();
-                        set.add(player.getPossibilities().size());
-                        map.put(currentWord, set);
+                        set.add(new WordCountWrapper(currentWord, player.getPossibilities().size()));
+                        map.put(word, set);
 
                     }
                 }
+                i++;
+                if (i > 3) {
+
+                    System.exit(0);
+                }
+                //System.out.println(map);
+                //System.exit(0);
             }
 
             //System.out.println(map);
