@@ -1,6 +1,8 @@
 package wordle;
 
 
+import com.google.common.base.CharMatcher;
+import org.junit.platform.commons.util.StringUtils;
 import trie.Trie;
 import trie.WordWrapper;
 import utils.StreamResources;
@@ -88,6 +90,10 @@ public class WordlePlayer {
         return trie.generatePotentialWords(currentState.toString(), charGuessesMap, charsNotInWordSet);
     }
 
+    public int getCharsInRightSpot() {
+        return CharMatcher.isNot('-').countIn(currentState);
+    }
+
     public void checkWord(String guess, boolean print) {
 
         validateWord(guess, trie);
@@ -154,10 +160,8 @@ public class WordlePlayer {
     public static void main(String[] args) throws Exception {
         // best initial guess: arose
 
-        //String word = getRandomWord("word_frequency_plurality_list");
-        //System.out.println(word);
         String word = "heard";
-        WordlePlayer solver = new WordlePlayer(word, "word_frequency_plurality_list");
+        WordlePlayer solver = new WordlePlayer(word, "potential_words");
 
         int numGuesses = 0;
         Scanner inputScanner = new Scanner(System.in);

@@ -10,7 +10,10 @@ import utils.StreamResources;
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
+import java.util.OptionalDouble;
 import java.util.Scanner;
 import java.util.Set;
 import java.util.SortedSet;
@@ -20,7 +23,7 @@ public class FindBestStartingWord {
 
     private static Set<String> getAllFiveLetterWords() {
         Set<String> ret = new HashSet<>();
-        InputStream inputStream = StreamResources.getFileFromResourceAsStream("words_list");
+        InputStream inputStream = StreamResources.getFileFromResourceAsStream("potential_words");
 
         Scanner freqScanner = new Scanner(inputStream);
         while(freqScanner.hasNextLine()) {
@@ -41,114 +44,85 @@ public class FindBestStartingWord {
         return ret;
     }
 
-    static class WordCountWrapper implements Comparable<WordCountWrapper>{
+    static class WordStruct {
         final String word;
-        final int count;
+        final List<Integer> numWordsRemainingAfterGuess;
+        final List<Integer> numCharsInRightSpotAfterGuess;
 
-        public WordCountWrapper(String word, int count) {
+        public WordStruct(String word, int numWordsRemainingAfterGuess, int numCharsInRightSpotAfterGuess) {
             this.word = word;
-            this.count = count;
+
+            this.numWordsRemainingAfterGuess = new LinkedList<>();
+            this.numCharsInRightSpotAfterGuess = new LinkedList<>();
+
+            this.numWordsRemainingAfterGuess.add(numWordsRemainingAfterGuess);
+            this.numCharsInRightSpotAfterGuess.add(numCharsInRightSpotAfterGuess);
         }
 
-        public String getWord() {
-            return word;
+        public void addEntry(int numWordsRemainingAfterGuess, int numCharsInRightSpotAfterGuess) {
+            this.numWordsRemainingAfterGuess.add(numWordsRemainingAfterGuess);
+            this.numCharsInRightSpotAfterGuess.add(numCharsInRightSpotAfterGuess);
         }
-
-        public int getCount() {
-            return count;
-        }
-
 
         @Override
         public boolean equals(Object o) {
             if (this == o) return true;
             if (o == null || getClass() != o.getClass()) return false;
-
-            WordCountWrapper that = (WordCountWrapper) o;
-
-            return Objects.equal(this.word, that.word) &&
-                    Objects.equal(this.count, that.count);
+            WordStruct that = (WordStruct) o;
+            return Objects.equal(word, that.word);
         }
 
         @Override
         public int hashCode() {
-            return Objects.hashCode(word, count);
+            return Objects.hashCode(word);
         }
 
-        @Override
-        public String toString() {
-            return MoreObjects.toStringHelper(this)
-                    .add("word", word)
-                    .add("count", count)
-                    .toString();
+        public List<Integer> getNumWordsRemainingAfterGuess() {
+            return numWordsRemainingAfterGuess;
         }
 
-        @Override
-        public int compareTo(WordCountWrapper o) {
-            return Integer.compare(getCount(), o.getCount());
+        public List<Integer> getNumCharsInRightSpotAfterGuess() {
+            return numCharsInRightSpotAfterGuess;
         }
-    }
-
-    static class TenSmallestSet {
-        final TreeSet<WordCountWrapper> set;
-
-        public TenSmallestSet() {
-            this.set = new TreeSet<>();
-        }
-
-        public void add(WordCountWrapper wordToAdd) {
-            if (set.size() < 10) {
-                set.add(wordToAdd);
-            } else if (wordToAdd.getCount() < set.last().getCount()) {
-                set.pollLast();
-                set.add(wordToAdd);
-            }
-        }
-
-        @Override
-        public String toString() {
-            return set.toString();
-        }
-
-
     }
 
     public static void main(String[] args) throws Exception {
 
-        Trie trie = Trie.fromFile("word_frequency_plurality_list");
+        Trie trie = Trie.fromFile("potential_words");
 
-        Map<String, TenSmallestSet> map = new HashMap<>();
+        Map<String, WordStruct> map = new HashMap<>();
 
-        int i = 0;
-        String best;
-        for (String word : getSetOfPastWinners()) {
+        for (String word : getAllFiveLetterWords()) {
+        //for (String word : getSetOfPastWinners()) {
 
-            for (String currentWord : getAllFiveLetterWords()) {
+            //for (String potentialStartingWord : getSetOfPastWinners()) {
+            for (String potentialStartingWord : getAllFiveLetterWords()) {
                 WordlePlayer player = new WordlePlayer(word, trie);
-                if (!currentWord.equals(word)) {
-                    player.checkWord(currentWord, false);
-                    if (map.containsKey(word)) {
-                        map.get(word).add(new WordCountWrapper(currentWord, player.getPossibilities().size()));
+                if (!potentialStartingWord.equals(word)) {
+                    player.checkWord(potentialStartingWord, false);
+                    if (map.containsKey(potentialStartingWord)) {
+
+                        map.get(potentialStartingWord).addEntry(player.getPossibilities().size(), player.getCharsInRightSpot());
                     } else {
-                        final TenSmallestSet set = new TenSmallestSet();
-                        set.add(new WordCountWrapper(currentWord, player.getPossibilities().size()));
-                        map.put(word, set);
+                        WordStruct struct = new WordStruct(potentialStartingWord, player.getPossibilities().size(), player.getCharsInRightSpot());
+                        map.put(potentialStartingWord, struct);
 
                     }
                 }
-                i++;
-                if (i > 3) {
-
-                    System.exit(0);
-                }
-                //System.out.println(map);
-                //System.exit(0);
             }
-
-            //System.out.println(map);
-            //System.exit(0);
         }
-        System.out.println(map);
+
+        for (String key : map.keySet()) {
+
+            final OptionalDouble averageRemainingWords = map.get(key).getNumWordsRemainingAfterGuess().stream()
+                    .mapToDouble(a -> a)
+                    .average();
+            final OptionalDouble averageCharsInRightPlace = map.get(key).getNumCharsInRightSpotAfterGuess().stream()
+                    .mapToDouble(a -> a)
+                    .average();
+            System.out.printf("%s %s %s %n", key, averageRemainingWords.toString(), averageCharsInRightPlace.toString());
+        }
+
     }
 
 }

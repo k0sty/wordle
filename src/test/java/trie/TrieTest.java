@@ -24,7 +24,7 @@ class TrieTest {
 
         trie.Trie trie = null;
         try {
-            trie = Trie.fromFile("word_frequency_plurality_list");
+            trie = Trie.fromFile("potential_words");
         } catch (FileNotFoundException e) {
             fail("Word Frequency file was not found");
         }

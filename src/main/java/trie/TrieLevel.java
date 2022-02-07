@@ -6,7 +6,7 @@ import java.util.Map;
 class TrieLevel {
     private final Map<Character, TrieLevel> trieLevelMap;
     private boolean isWord;
-    private int levelNumber;
+    private final int levelNumber;
 
     public TrieLevel (int levelNumber) {
         this.trieLevelMap = new HashMap<>();

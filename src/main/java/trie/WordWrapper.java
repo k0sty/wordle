@@ -15,11 +15,8 @@ public class WordWrapper implements Comparable<WordWrapper>{
 
     public static WordWrapper fromLine(String line) {
         String[] arr = line.split(" ");
-        if (arr.length != 3) {
-            throw new IllegalArgumentException(line + " is not formatted properly");
-        }
 
-        return new WordWrapper(arr[0], Double.parseDouble(arr[1]), Boolean.parseBoolean(arr[2]));
+        return new WordWrapper(line.trim(), 0d, false);
     }
 
     @Override
@@ -47,6 +44,11 @@ public class WordWrapper implements Comparable<WordWrapper>{
         if (this.plural && !other.plural) {
             return -1;
         }
+
+        if (this.frequency == other.frequency) {
+            return this.word.compareTo(other.word);
+        }
+
         return Double.compare(frequency, other.frequency);
     }
 
