@@ -2,7 +2,6 @@ package wordle;
 
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
-import com.sun.source.tree.Tree;
 import trie.Trie;
 import trie.WordWrapper;
 import utils.StreamResources;
