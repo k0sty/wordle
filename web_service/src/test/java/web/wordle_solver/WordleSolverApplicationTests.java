@@ -29,9 +29,10 @@ public class WordleSolverApplicationTests {
 
 	@Test
 	public void demoTrieEndpoint() throws Exception {
-		mvc.perform(MockMvcRequestBuilders.get("/demoTrie").accept(MediaType.APPLICATION_JSON))
-				.andExpect(status().isOk())
-				.andExpect(content().string(equalTo("{\"potentialWords\":[\"wince\"]}")));
+		mvc.perform(MockMvcRequestBuilders.get("/demoTrie?missingCharsCSV=a,r,s,m,o,v,t,l,h&charGuessesMap=0n,2c&currentGuess=-i--e")
+			.accept(MediaType.APPLICATION_JSON))
+			.andExpect(status().isOk())
+			.andExpect(content().string(equalTo("{\"potentialWords\":[\"wince\"]}")));
 	}
 
 }

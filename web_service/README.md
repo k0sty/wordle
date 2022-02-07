@@ -23,6 +23,7 @@ curl localhost:8080
 curl localhost:8080/demoTrie
 # the latter to be replaced by better parameterized endpoints
 # also will render JSON in the future
+curl localhost:8080/demoTrie?missingCharsCSV=a,r,s,m,o,v,t,l,h&charGuessesMap=0n,2c&currentGuess=-i--e
 ```
 
 ## Unit Tests
@@ -31,5 +32,5 @@ curl localhost:8080/demoTrie
 ../gradlew clean test (-i)
 
 # ...or speicific Class
-./gradlew clean test --tests SerializerTests -i
+../gradlew clean test --tests WordleSolverApplicationTests -i
 ```
