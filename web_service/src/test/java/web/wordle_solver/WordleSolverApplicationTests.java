@@ -29,10 +29,37 @@ public class WordleSolverApplicationTests {
 
 	@Test
 	public void demoTrieEndpoint() throws Exception {
-		mvc.perform(MockMvcRequestBuilders.get("/demoTrie?missingCharsCSV=a,r,s,m,o,v,t,l,h&charGuessesMap=0n,2c&currentGuess=-i--e")
+		mvc.perform(MockMvcRequestBuilders.get("/demoTrie?missingCharsCSV=a,r,s,m,o,v,t,l,h&charGuessesMapCSV=0n,2c&currentGuess=-i--e")
 			.accept(MediaType.APPLICATION_JSON))
 			.andExpect(status().isOk())
 			.andExpect(content().string(equalTo("{\"potentialWords\":[\"wince\"]}")));
+	}
+
+	@Test
+	public void requesetWithBadMissingCharsCSV() throws Exception {
+		String notChar = "br";
+		mvc.perform(MockMvcRequestBuilders.get("/demoTrie?missingCharsCSV=a,"+notChar+",s,m,o,v,t,l,h&charGuessesMapCSV=0n,2c&currentGuess=-i--e")
+			.accept(MediaType.APPLICATION_JSON))
+			.andExpect(status().is4xxClientError())
+			.andExpect(content().string(equalTo("missingCharsCSV contains non-char: " + notChar)));
+	}
+
+	@Test
+	public void requesetWithBadCharGuessMap() throws Exception {
+		String badMapPair = "02b";
+		mvc.perform(MockMvcRequestBuilders.get("/demoTrie?missingCharsCSV=a,s,m,o,v,t,l,h&charGuessesMapCSV=0n,"+badMapPair+"&currentGuess=-i--e")
+			.accept(MediaType.APPLICATION_JSON))
+			.andExpect(status().is4xxClientError())
+			.andExpect(content().string(equalTo("charGuessesMapCSV contains bad map pair: " + badMapPair)));
+	}
+
+	@Test
+	public void requesetWithBadCurrentGuess() throws Exception {
+		String badCurrentGuess = "-i--e---";
+		mvc.perform(MockMvcRequestBuilders.get("/demoTrie?missingCharsCSV=a,s,m,o,v,t,l,h&charGuessesMapCSV=0n&currentGuess="+badCurrentGuess)
+			.accept(MediaType.APPLICATION_JSON))
+			.andExpect(status().is4xxClientError())
+			.andExpect(content().string(equalTo("currentGuess is invalid: " + badCurrentGuess)));
 	}
 
 }
