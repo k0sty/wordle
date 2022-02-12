@@ -139,17 +139,16 @@ public class Trie {
         return ret;
     }
 
-    public SortedSet<WordWrapper> generatePotentialWords(String currentGuess, Map<Character, Set<Integer>> charGuessesMap,
+    public PotentialWordsWrapper generatePotentialWords(String currentGuess, Map<Character, Set<Integer>> charGuessesMap,
                                               Set<Character> notPresent) {
 
-        TreeSet<WordWrapper> ret = new TreeSet<>();
-
+        PotentialWordsWrapper wrapper = new PotentialWordsWrapper(currentGuess);
         for (String str : generatePotentialWordsHelper(new HashSet<>(), currentGuess, new StringBuilder(), rootTrieLevel,
                 charGuessesMap, notPresent)) {
-            ret.add(statsMap.get(str));
+            wrapper.addWord(statsMap.get(str));
         }
 
-        return ret.descendingSet();
+        return wrapper;
     }
 
     public boolean checkIfPresent(String word) {

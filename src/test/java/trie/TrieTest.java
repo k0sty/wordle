@@ -31,21 +31,17 @@ class TrieTest {
         final Set<Character> missingChars = Stream.of('r', 'o', 's', 'e', 'f', 'l')
                 .collect(Collectors.toCollection(HashSet::new));
 
-        /*
-        final Set<Character> wrongSlotChars = Stream.of('a', 'i').collect(Collectors.toCollection(HashSet::new));
-        */
 
         Map<Character, Set<Integer>> charGuessesMap = new HashMap<>();
         charGuessesMap.put('a', Stream.of(0)
                 .collect(Collectors.toCollection(HashSet::new)));
         charGuessesMap.put('i', Stream.of(3)
                 .collect(Collectors.toCollection(HashSet::new)));
-        final SortedSet<WordWrapper> potentialWords = trie.generatePotentialWords("--n--", charGuessesMap,
+        final PotentialWordsWrapper potentialWordsWrapper = trie.generatePotentialWords("--n--", charGuessesMap,
                 missingChars);
 
         boolean wordExists = false;
-        for (WordWrapper currentWrappedWord : potentialWords) {
-            System.out.println(currentWrappedWord.getWord());
+        for (WordWrapper currentWrappedWord : potentialWordsWrapper.getWordsSet()) {
             if (currentWrappedWord.getWord().equalsIgnoreCase(TARGET_WORD)) {
                 wordExists = true;
                 break;

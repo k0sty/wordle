@@ -101,9 +101,9 @@ public class FindBestStartingWord {
                     player.checkWord(potentialStartingWord, false);
                     if (map.containsKey(potentialStartingWord)) {
 
-                        map.get(potentialStartingWord).addEntry(player.getPossibilities().size(), player.getCharsInRightSpot());
+                        map.get(potentialStartingWord).addEntry(player.getPossibilities().getWordsSet().size(), player.getCharsInRightSpot());
                     } else {
-                        WordStruct struct = new WordStruct(potentialStartingWord, player.getPossibilities().size(), player.getCharsInRightSpot());
+                        WordStruct struct = new WordStruct(potentialStartingWord, player.getPossibilities().getWordsSet().size(), player.getCharsInRightSpot());
                         map.put(potentialStartingWord, struct);
 
                     }
