@@ -22,7 +22,7 @@ public class WordleSolverApplicationTests {
 
 	@Test
 	public void webServiceIndex() throws Exception {
-		mvc.perform(MockMvcRequestBuilders.get("/").accept(MediaType.APPLICATION_JSON))
+		mvc.perform(MockMvcRequestBuilders.get("/responseTest").accept(MediaType.APPLICATION_JSON))
 				.andExpect(status().isOk())
 				.andExpect(content().string(equalTo("Index of WorldSolver!")));
 	}

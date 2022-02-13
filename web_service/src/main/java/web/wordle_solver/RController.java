@@ -21,9 +21,9 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @RestController
-public class Controller {
+public class RController {
 
-	@GetMapping("/")
+	@GetMapping("/responseTest")
 	public String index() {
 		return "Index of WorldSolver!";
 	}

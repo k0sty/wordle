@@ -18,9 +18,11 @@ This is a wrapping class to prevent multiple instances of Wordle functional clas
 
 `../gradlew bootRun`
 
+Then access at [localhost:8080](localhost:8080)
+
 ```
-# index
-curl localhost:8080
+# Response test
+curl localhost:8080/responseTest
 
 # renders JSON response
 curl "localhost:8080/demoTrie?missingCharsCSV=a,r,s,m,o,v,t,l,h&charGuessesMapCSV=0n,2c&currentGuess=-i--e"
