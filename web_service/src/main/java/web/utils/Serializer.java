@@ -5,6 +5,7 @@ import org.json.JSONObject;
 
 import java.util.Iterator;
 
+import trie.PotentialWordsWrapper;
 import trie.WordWrapper;
 import java.util.SortedSet;
 
@@ -15,13 +16,12 @@ public class Serializer {
     * friendly or JSON form
     */
 
-    public static String createJSONString(SortedSet<WordWrapper> set) {
+    public static String createJSONString(PotentialWordsWrapper potentialWordsWrapper) {
 
         JSONArray arrayWords = new JSONArray();
 
-        Iterator value = set.iterator();
-        while (value.hasNext()) {
-            arrayWords.put(value.next());
+        for (WordWrapper currentWrappedWord : potentialWordsWrapper.getWordsSet()) {
+            arrayWords.put(currentWrappedWord.getWord());
         }
 
         JSONObject returnJSONObj = new JSONObject();

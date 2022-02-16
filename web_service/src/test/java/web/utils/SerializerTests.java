@@ -5,6 +5,7 @@ import web.wordle_solver.SingletonSteward;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import trie.PotentialWordsWrapper;
 import trie.WordWrapper;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -32,9 +33,9 @@ public class SerializerTests {
                         .collect(Collectors.toCollection(HashSet::new)));
                 charGuessesMap.put('c', Stream.of(2)
                         .collect(Collectors.toCollection(HashSet::new)));
-                final SortedSet<WordWrapper> potentialWords = singletonSteward.trie.generatePotentialWords("-i--e", charGuessesMap, missingChars);
+                final PotentialWordsWrapper potentialWordsWrapper = singletonSteward.trie.generatePotentialWords("-i--e", charGuessesMap, missingChars);
 
-                String jsonOfPotentialWords = Serializer.createJSONString(potentialWords);
+                String jsonOfPotentialWords = Serializer.createJSONString(potentialWordsWrapper);
 
                 assertEquals(jsonOfPotentialWords,"{\"potentialWords\":[\"wince\"]}", "generated JSON does not match up");
         }
