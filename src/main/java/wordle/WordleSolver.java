@@ -1,5 +1,6 @@
 package wordle;
 
+import trie.PotentialWordsWrapper;
 import trie.Trie;
 import trie.WordWrapper;
 
@@ -30,11 +31,13 @@ public class WordleSolver {
         charGuessesMap.put('t', Stream.of(3)
                 .collect(Collectors.toCollection(HashSet::new)));
 
-        final SortedSet<WordWrapper> potentialWords =
+
+        final PotentialWordsWrapper potentialWordsWrapper =
                 trie.generatePotentialWords("-l---", charGuessesMap, missingChars);
 
-        System.out.println(potentialWords);
-        System.out.println(potentialWords.size());
+        System.out.println(potentialWordsWrapper.getWordsSet());
+        potentialWordsWrapper.printLetterRatios();
+
         long t2 = System.currentTimeMillis();
         System.out.println(t2 - t1);
 

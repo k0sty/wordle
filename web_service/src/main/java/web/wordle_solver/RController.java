@@ -6,6 +6,8 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.HttpStatus;
 
+import trie.PotentialWordsWrapper;
+
 import web.utils.Serializer;
 
 import java.util.StringTokenizer;
@@ -70,8 +72,8 @@ public class RController {
 		}
 
 		SingletonSteward singletonSteward = SingletonSteward.getInstance();
-        final SortedSet<WordWrapper> potentialWords = singletonSteward.trie.generatePotentialWords(currentGuess, charGuessesMap, missingChars);
-		String potentialWordsJSON = Serializer.createJSONString(potentialWords);
+        final PotentialWordsWrapper potentialWordsWrapper = singletonSteward.trie.generatePotentialWords(currentGuess, charGuessesMap, missingChars);
+		String potentialWordsJSON = Serializer.createJSONString(potentialWordsWrapper);
 
 		return ResponseEntity.ok(potentialWordsJSON);
 	}

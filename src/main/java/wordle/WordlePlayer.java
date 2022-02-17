@@ -3,6 +3,7 @@ package wordle;
 
 import com.google.common.base.CharMatcher;
 import org.junit.platform.commons.util.StringUtils;
+import trie.PotentialWordsWrapper;
 import trie.Trie;
 import trie.WordWrapper;
 import utils.StreamResources;
@@ -86,7 +87,7 @@ public class WordlePlayer {
         System.out.println(getPossibilities());
     }
 
-    public SortedSet<WordWrapper> getPossibilities() {
+    public PotentialWordsWrapper getPossibilities() {
         return trie.generatePotentialWords(currentState.toString(), charGuessesMap, charsNotInWordSet);
     }
 
