@@ -33,6 +33,15 @@ curl "localhost:8080/demoTrie?missingCharsCSV=a,r,s,m,o,v,t,l,h&charGuessesMapCS
 curl -i "localhost:8080/demoTrie?missingCharsCSV=a,rt,s,m,o,v,t,l,h&charGuessesMapCSV=0n,2c&currentGuess=-i--e"
 ```
 
+## Formal Service
+
+```
+# sudo necessary under EC2
+sudo SERVER_PORT=80 ../gradlew bootRun
+```
+
+then CTRL + Z to background
+
 ## Unit Tests
 
 ```
