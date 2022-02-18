@@ -1,15 +1,17 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
    <head>
+  <meta charset="utf-8"/>
    <title>Wordle Solver</title>
    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
-   <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+   <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
    <style>
-/* 
+/*
 Credit for animated background:
-https://codepen.io/mohaiman/pen/MQqMyo 
+https://codepen.io/mohaiman/pen/MQqMyo
 */
 @keyframes animate {
     0%{
@@ -117,8 +119,8 @@ https://codepen.io/mohaiman/pen/MQqMyo
     animation-delay: 34s;
 }
 
-input { 
-    text-align: center; 
+input {
+    text-align: center;
 }
 
 h1, p, label {
@@ -132,6 +134,11 @@ label {
 body {
    padding-top: 55px;
 }
+
+.outputdev div p {
+  text-align: center;
+  font-family: monospace;
+}
       </style>
    </head>
    <body>
@@ -140,54 +147,67 @@ body {
             <div class="col col-lg-8">
                <h1>Wordle Solver</h1>
                <p>Identify valid words during your Wordle game using our <a href="https://en.wikipedia.org/wiki/Trie">trie</a>-based algorithm.</p>
-               <form>
+               <form autocomplete="off">
 
                   <label for="">Current guess</label>
                   <div class="form-row">
                      <div class="col">
-                        <input type="text" class="form-control form-control-lg" id="currentGuess" placeholder="a">
+                        <input type="text" class="form-control form-control-lg" id="currentGuess1" maxlength="1">
                      </div>
                      <div class="col">
-                        <input type="text" class="form-control form-control-lg" id="currentGuess" placeholder="b">
+                        <input type="text" class="form-control form-control-lg" id="currentGuess2" maxlength="1">
                      </div>
                      <div class="col">
-                        <input type="text" class="form-control form-control-lg" id="currentGuess" placeholder="c">
+                        <input type="text" class="form-control form-control-lg" id="currentGuess3" maxlength="1">
                      </div>
                      <div class="col">
-                        <input type="text" class="form-control form-control-lg" id="currentGuess" placeholder="d">
+                        <input type="text" class="form-control form-control-lg" id="currentGuess4" maxlength="1">
                      </div>
                      <div class="col">
-                        <input type="text" class="form-control form-control-lg" id="currentGuess" placeholder="e">
+                        <input type="text" class="form-control form-control-lg" id="currentGuess5" maxlength="1">
                      </div>
                   </div>
 
                   <label for="">Letters in wrong places</label>
                   <div class="form-row">
                      <div class="col">
-                        <input type="text" class="form-control form-control-lg" id="charGuesses1" placeholder="abc">
+                        <input type="text" class="form-control form-control-lg" id="charGuesses1">
                      </div>
                      <div class="col">
-                        <input type="text" class="form-control form-control-lg" id="charGuesses2" placeholder="abc">
+                        <input type="text" class="form-control form-control-lg" id="charGuesses2">
                      </div>
                      <div class="col">
-                        <input type="text" class="form-control form-control-lg" id="charGuesses3" placeholder="abc">
+                        <input type="text" class="form-control form-control-lg" id="charGuesses3">
                      </div>
                      <div class="col">
-                        <input type="text" class="form-control form-control-lg" id="charGuesses4" placeholder="abc">
+                        <input type="text" class="form-control form-control-lg" id="charGuesses4">
                      </div>
                      <div class="col">
-                        <input type="text" class="form-control form-control-lg" id="charGuesses5" placeholder="abc">
+                        <input type="text" class="form-control form-control-lg" id="charGuesses5">
                      </div>
                   </div>
 
                   <div class="form-group">
                      <label for="missingChars">Letters not in the Wordle</label>
-                     <input type="text" class="form-control form-control-lg" id="missingChars" aria-describedby="emailHelp" placeholder="abcde">
+                     <input type="text" class="form-control form-control-lg" id="missingChars" aria-describedby="emailHelp">
                   </div>
-                  
-                  <button type="submit" class="btn btn-primary">Submit</button>
+
+                  <button id="submitToTrieQuery" type="button" class="btn btn-primary">Submit</button>
                </form>
             </div>
+         </div>
+         <div class="row justify-content-md-center outputdev">
+            <div class="col col-md-4"></div>
+            <div class="col col-md-1">
+               <p id="p0"></p>
+            </div>
+            <div class="col col-md-1">
+               <p id="p1"></p>
+            </div>
+            <div class="col col-md-1">
+               <p id="p2"></p>
+            </div>
+            <div class="col col-md-5"></div>
          </div>
       </div>
 
@@ -204,4 +224,97 @@ body {
          <li></li>
       </ul>
    </body>
+   <script>
+   $(document).ready(function() {
+     $('#submitToTrieQuery').on('click', function(event) {
+        event.preventDefault(); // To prevent following the link (optional)
+        var currentGuess = getGuessChar('currentGuess1') + getGuessChar('currentGuess2') +getGuessChar('currentGuess3') +getGuessChar('currentGuess4') +getGuessChar('currentGuess5');
+
+        var charGuessesMapCSV = collectCharGuessesMapCSV();
+
+        var missingCharsCSV = collectMissingCharsCSV();
+
+         // Make the call
+        $.ajax({
+          url: `demoTrie?missingCharsCSV=${missingCharsCSV}&charGuessesMapCSV=${charGuessesMapCSV}&currentGuess=${currentGuess}`,
+          type: "GET",
+          success: function(result) {
+            var jsonResult = JSON.parse(result);
+
+            // Clear and place
+            $('#p0').text("");
+            $('#p1').text("");
+            $('#p2').text("");
+            var indx = 0;
+            for (word of jsonResult.potentialWords) {
+               $('#p' + indx).append( word + "<br>" );
+               indx++;
+               indx = indx % 3;
+            }
+            document.getElementById("p0").scrollIntoView();
+          },
+          error: function(error) {
+            console.log(`Error: ${error}`)
+          }
+        })
+      });
+
+      function getGuessChar(html_id) {
+        // either return single char or '-'
+        var str = $('#' + html_id).val();
+        if (str.length==0) {
+          return '-';
+        } else {
+          return str.toLowerCase();
+        }
+      }
+
+      function collectCharGuessesMapCSV() {
+        // from the charGuesses* input boxes, buildout the form charGuessesMapCSV=0n,2c
+        var returnString = "";
+        var index=0;
+        for (const htmlID of ["charGuesses1","charGuesses2","charGuesses3","charGuesses4","charGuesses5"]) {
+          var letters = $('#' + htmlID).val();
+
+          var i = letters.length;
+          while (i--) {
+            returnString = returnString.concat(index + letters.charAt(i).toLowerCase() +  ",");
+          }
+
+          index++;
+        }
+
+        //remove the last comma,
+        if (returnString.length > 0) {
+          returnString = returnString.slice(0,-1);
+        }
+
+        return returnString;
+      }
+
+      function collectMissingCharsCSV() {
+        var returnString = "";
+        var letters = $('#missingChars').val();
+
+        var i = letters.length;
+        while (i--) {
+          returnString = returnString.concat(letters.charAt(i).toLowerCase() +  ",");
+        }
+
+        //remove the last comma,
+        if (returnString.length > 0) {
+          returnString = returnString.slice(0,-1);
+        }
+
+        return returnString;
+      }
+
+      // Limit input fields to letters only.
+      $('input').on('keyup', function(event) {
+        this.value = this.value.replace(/[^A-Za-z]/, '');
+        this.value = this.value.toUpperCase();
+      });
+  });
+
+   </script>
 </html>
