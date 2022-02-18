@@ -42,6 +42,10 @@ sudo SERVER_PORT=80 ../gradlew bootRun
 
 then CTRL + Z to background
 
+```
+ps -aux | grep gradlew
+```
+
 ## Unit Tests
 
 ```
