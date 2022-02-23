@@ -139,6 +139,36 @@ body {
   text-align: center;
   font-family: monospace;
 }
+
+input[id^='currentGuess'], textarea {
+  background-color : #19a627;
+}
+
+input[id^='charGuesses'], textarea {
+  background-color : #b2b80f;
+}
+
+input[id='missingChars'], textarea {
+  background-color : #b0b0b0;
+}
+
+#loading {
+  display: none;
+  width: 50px;
+  height: 50px;
+  border: 3px solid rgba(255,255,255,.3);
+  border-radius: 50%;
+  border-top-color: #fff;
+  animation: spin 1s ease-in-out infinite;
+  -webkit-animation: spin 1s ease-in-out infinite;
+}
+
+@keyframes spin {
+  to { -webkit-transform: rotate(360deg); }
+}
+@-webkit-keyframes spin {
+  to { -webkit-transform: rotate(360deg); }
+}
       </style>
    </head>
    <body>
@@ -196,7 +226,8 @@ body {
                </form>
             </div>
          </div>
-         <div class="row justify-content-md-center outputdev">
+         <div class="row justify-content-center"><div id="loading"></div></div>
+         <div class="row justify-content-center outputdev">
             <div class="col col-md-4"></div>
             <div class="col col-md-1">
                <p id="p0"></p>
@@ -228,6 +259,14 @@ body {
    $(document).ready(function() {
      $('#submitToTrieQuery').on('click', function(event) {
         event.preventDefault(); // To prevent following the link (optional)
+
+        // Clear and place
+        $('#submitToTrieQuery').prop('disabled', true);
+        $('#p0').text(""); $('#p0').hide();
+        $('#p1').text(""); $('#p1').hide();
+        $('#p2').text(""); $('#p2').hide();
+        $('#loading').show();
+
         var currentGuess = getGuessChar('currentGuess1') + getGuessChar('currentGuess2') +getGuessChar('currentGuess3') +getGuessChar('currentGuess4') +getGuessChar('currentGuess5');
 
         var charGuessesMapCSV = collectCharGuessesMapCSV();
@@ -241,20 +280,29 @@ body {
           success: function(result) {
             var jsonResult = JSON.parse(result);
 
-            // Clear and place
-            $('#p0').text("");
-            $('#p1').text("");
-            $('#p2').text("");
             var indx = 0;
             for (word of jsonResult.potentialWords) {
                $('#p' + indx).append( word + "<br>" );
                indx++;
                indx = indx % 3;
             }
-            document.getElementById("p0").scrollIntoView();
+
+            if (jsonResult.potentialWords.length==0) {
+              $('#p1').text( "NONE!" );
+            }
           },
           error: function(error) {
             console.log(`Error: ${error}`)
+          },
+          complete: function(data) {
+            setTimeout(function() {
+               $('#loading').hide();
+               $('#submitToTrieQuery').prop('disabled', false);
+               $('#p0').show();
+               $('#p1').show();
+               $('#p2').show();
+               document.getElementById("p0").scrollIntoView();
+            }, 1000);
           }
         })
       });

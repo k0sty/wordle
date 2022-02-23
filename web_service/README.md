@@ -36,14 +36,20 @@ curl -i "localhost:8080/demoTrie?missingCharsCSV=a,rt,s,m,o,v,t,l,h&charGuessesM
 ## Formal Service
 
 ```
-# sudo necessary under EC2
-sudo SERVER_PORT=80 ../gradlew bootRun
+
+../gradlew clean build
+cat build/bootJarMainClassName  #get the fully qualified package name
+cp -i build/libs/wordle_solver-0.0.1-SNAPSHOT.jar ~/wordle_running/
+
+# sudo necessary under EC2 to run on port 80
+cd ~/wordle_running/
+sudo su
+sudo SERVER_PORT=80 nohup /usr/bin/java -jar /home/ec2-user/wordle_running/wordle_solver-0.0.1-SNAPSHOT.jar web.wordle_solver.WordleSolverApplication > /home/ec2-user/wordle_running/nohup.out &
 ```
 
-then CTRL + Z to background
-
 ```
-ps -aux | grep gradlew
+ps -aux | grep WordleSolverApplication
+sudo kill -9 xxx
 ```
 
 ## Unit Tests
