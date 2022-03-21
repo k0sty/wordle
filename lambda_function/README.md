@@ -8,7 +8,7 @@ This sub-project derived from repo [aws-lambda-developer-guide](https://github.c
 
 ## UI / HTML
 
-The directory [static_html](static_html) has html+JS+CSS for invoking the endpoint and displaying results.  Note that the Lambda function's `Access-Control-Allow-Origin` header value is curerntly `*`.
+The directory [static_html](static_html) has html+JS+CSS for invoking the endpoint and displaying results.  Note that the Lambda function's `Access-Control-Allow-Origin` header value is currently `*`.  The `apiURL_base` JS variable also needs to point to the exposed service.
 
 ## Symlinking
 
