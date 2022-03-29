@@ -75,7 +75,7 @@ public class Handler implements RequestStreamHandler {
           }
       }
 
-      headerJson.put("Access-Control-Allow-Origin","*");
+      headerJson.put("Access-Control-Allow-Origin","http://solvewordle.net");
 
       responseBody.put("missingCharsCSV", missingCharsCSV);
       responseBody.put("charGuessesMapCSV", charGuessesMapCSV);
