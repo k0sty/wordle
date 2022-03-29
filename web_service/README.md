@@ -26,6 +26,7 @@ curl localhost:8080/responseTest
 
 # renders JSON response
 curl "localhost:8080/demoTrie?missingCharsCSV=a,r,s,m,o,v,t,l,h&charGuessesMapCSV=0n,2c&currentGuess=-i--e"
+curl -i "https://5nis79o3ld.execute-api.us-east-1.amazonaws.com/prod/crunch?missingCharsCSV=a,r,s,m,o,v,t,l,h&charGuessesMapCSV=0n,2c&currentGuess=-i--e"
 # with more responses
 curl "localhost:8080/demoTrie?missingCharsCSV=a,r,s,m,o,v,t,l,h&charGuessesMapCSV=&currentGuess=-i--e"
 
