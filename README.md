@@ -1,6 +1,10 @@
 # wordle
 ![Build](https://github.com/k0sty/wordle/actions/workflows/gradle.yml/badge.svg)
 
+Live deployment at [solvewordle.net](http://solvewordle.net/).
+
+Read the [blog post](https://matthewkindzerske.com/2022/03/30/side-project-wordle-solver/).
+
 ## Requirements
 
 - Java (OpenJDK ok)
