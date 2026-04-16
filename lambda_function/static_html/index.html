@@ -294,7 +294,8 @@ input[id='missingChars'], textarea {
             }
           },
           error: function(error) {
-            console.log(`Error: ${error}`)
+            console.log(`Error: ${error.status}`)
+            console.log(`Error: ${error.responseText}`)
           },
           complete: function(data) {
             setTimeout(function() {
