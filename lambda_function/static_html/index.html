@@ -275,7 +275,7 @@ input[id='missingChars'], textarea {
         var missingCharsCSV = collectMissingCharsCSV();
 
          // Make the call
-         var apiURL_base = ""
+         var apiURL_base = "https://5nis79o3ld.execute-api.us-east-1.amazonaws.com/prod/crunch"
         $.ajax({
           url: `${apiURL_base}?missingCharsCSV=${missingCharsCSV}&charGuessesMapCSV=${charGuessesMapCSV}&currentGuess=${currentGuess}`,
           type: "GET",
@@ -294,7 +294,8 @@ input[id='missingChars'], textarea {
             }
           },
           error: function(error) {
-            console.log(`Error: ${error}`)
+            console.log(`Error: ${error.status}`)
+            console.log(`Error: ${error.responseText}`)
           },
           complete: function(data) {
             setTimeout(function() {

@@ -28,6 +28,16 @@ This command is not useful, but syntax handy for future gradle work:
 
 # Sub Projects
 
+## Deployment hints
+
+(for debugging hints)
+
+Lambda: `lambda_function/` contains scripts for the mvn/gradle build, package, and cloudformation deployment.  The java code contains Header additions for `Access-Control-Allow-Origin` to match the ultimate deployed domain.
+
+API GW: manually created, pointing to the Lambda.
+
+S3: manually created, contains the file `lambda_function/static_html/index.html` (but with `apiURL_base`) pointed to the API GW.
+
 ## Lambda_Function
 
 The directory `lambda_function` contains an AWS `RequestStreamHandler` which will expose functionality from the overall `wordle` repo.  There are also supporting bash scripts for deployment via AWS CLI.  See [lambda_function/README.md](web_service/README.md) for more detail.
